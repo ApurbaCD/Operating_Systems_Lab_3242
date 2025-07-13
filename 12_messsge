@@ -1,0 +1,5 @@
+gcc msgqueue_sender.c -o sender
+gcc msgqueue_receiver.c -o receiver
+./sender
+./receiver
+

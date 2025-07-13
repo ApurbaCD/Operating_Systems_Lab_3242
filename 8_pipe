@@ -1,0 +1,112 @@
+Unnamed pipe or ordinary pipe
+
+✅ fd = open(fifo, O_WRONLY);
+
+    This line opens a named pipe (FIFO) for writing.
+
+    fifo is a string variable that holds the path/name of the FIFO file.
+    
+    
+    
+    char *fifo = "myfifo";
+
+That means:
+
+    fifo is a pointer to a string
+
+    "myfifo" is the name of the named pipe in the file system (just like a file)
+
+    This FIFO must be created before opening using:
+
+mkfifo myfifo
+
+or programmatically using:
+
+#include <sys/stat.h>
+mkfifo("myfifo", 0666);
+
+
+
+
+
+When you run this shell command, you're telling the operating system:
+
+    📁 “Create a special file named myfifo in the current directory, which acts as a named pipe.”
+
+🔍 In your C program:
+
+char *fifo = "myfifo";
+int fd = open(fifo, O_WRONLY);
+
+    This tells the C program to open the file named myfifo, which you previously created using mkfifo.
+
+    So yes — fifo must contain the exact same filename string as the name you used in the shell.
+    
+    
+  
+###########
+
+    🔧 Compilation and Execution
+
+    Create the FIFO:
+
+mkfifo myfifo
+
+Compile both programs:
+
+gcc writer.c -o writer(file name)
+gcc reader.c -o reader (file name)
+
+Run the reader in one terminal:
+
+./reader
+
+Run the writer in another terminal:
+
+./writer
+
+
+
+
+
+
+
+
+
+
+10:
+
+| Operation | What happens if the other end is missing? |
+| --------- | ----------------------------------------- |
+| `read()`  | ✅ **Blocks** until a writer is present.   |
+| `write()` | ❌ **Blocks** until a reader is present.   |
+
+
+
+🔹 What is pipe_fd?
+pipe_fd is an array of 2 integers. It is used to store two file descriptors returned by the pipe() system call.
+
+int pipe_fd[2];
+
+
+pipe(pipe_fd);
+
+
+
+it fills pipe_fd[0] and pipe_fd[1] with the file descriptors for the read and write ends of the pipe.
+"fd" stands for File Descriptor.
+
+
+
+A file descriptor is an integer that the OS uses to refer to an open file, device, or communication channel (like a pipe).
+In Linux:
+
+File Descriptor
+Meaning
+0
+stdin (input)
+1
+stdout (output)
+2
+stderr (error output)
+
